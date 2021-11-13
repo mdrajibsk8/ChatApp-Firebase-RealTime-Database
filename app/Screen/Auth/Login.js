@@ -20,15 +20,44 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { COLORS } from '../../Component/Constant/Color';
 import { FONTS } from '../../Component/Constant/Font';
 import Navigation from '../../Service/Navigation';
+import database from '@react-native-firebase/database';
+import SimpleToast from 'react-native-simple-toast';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/reducer/user';
+import Auth from '../../Service/Auth';
 
 const {width, height} = Dimensions.get('window');
 
 function Login() {
 
-  const [mobile, setmobile] = useState('');
+  const dispatch = useDispatch();
 
+  const [email, setemail] = useState('');
+  const [pass, setpass] = useState('');
 
-  useEffect(() => {}, []);
+  const loginUser = async () => {
+    database()
+      .ref('users/')
+      .orderByChild("emailId")
+      .equalTo(email)
+      .once('value')
+      .then( async snapshot => {
+        if (snapshot.val() == null) {
+           SimpleToast.show("Invalid Email Id!");
+           return false;
+        }
+        let userData = Object.values(snapshot.val())[0];
+        if (userData?.password != pass) {
+           SimpleToast.show("Invalid Password!");
+           return false;
+        }
+
+        console.log('User data: ', userData);
+        dispatch(setUser(userData));
+        await Auth.setAccount(userData);
+        SimpleToast.show("Login Successfully!");
+      });
+  };
 
   return (
     <Container>
@@ -82,12 +111,12 @@ function Login() {
                     <TextInput
                       style={styles.inputs}
                       placeholder="Enter Email Id"
-                      keyboardType="number-pad"
+                      keyboardType="email-address"
                       underlineColorAndroid="transparent"
                       onChangeText={value => {
-                        setmobile(value);
+                        setemail(value);
                       }}
-                      value={mobile}
+                      value={email}
                       placeholderTextColor={COLORS.liteBlack}
                     />
                   </View>
@@ -107,12 +136,11 @@ function Login() {
                     <TextInput
                       style={styles.inputs}
                       placeholder="Enter Password"
-                      keyboardType="number-pad"
                       underlineColorAndroid="transparent"
                       onChangeText={value => {
-                        setmobile(value);
+                        setpass(value);
                       }}
-                      value={mobile}
+                      value={pass}
                       placeholderTextColor={COLORS.liteBlack}
                     />
                   </View>
@@ -121,7 +149,8 @@ function Login() {
 
               <TouchableOpacity
                 style={styles.btn}
-                onPress={() => Navigation.navigate('AppStack')}
+                // onPress={() => Navigation.navigate('AppStack')}
+                onPress={loginUser}
                 >
                 <Text style={styles.btnText}>Login Now</Text>
               </TouchableOpacity>

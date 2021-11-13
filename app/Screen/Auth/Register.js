@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   StatusBar,
   Text,
@@ -6,7 +6,6 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   TextInput,
   Image,
 } from 'react-native';
@@ -20,6 +19,10 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { COLORS } from '../../Component/Constant/Color';
 import { FONTS } from '../../Component/Constant/Font';
 import Navigation from '../../Service/Navigation';
+import uuid from 'react-native-uuid';
+import SimpleToast from 'react-native-simple-toast';
+import database from '@react-native-firebase/database';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,6 +32,33 @@ function Register() {
   const [email, setemail] = useState('');
   const [pass, setpass] = useState('');
   const [about, setabout] = useState('');
+
+  const registerUser = async () => {
+    if (name == '' || email == '' || pass == '' || about == '') {
+      SimpleToast.show('Fill in all the fields!');
+      return false;
+    }
+    let data = {
+      id: uuid.v4(),
+      name: name,
+      emailId: email,
+      password: pass,
+      about: about,
+      img : "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png"
+    };
+
+    database()
+      .ref('/users/'+data.id)
+      .set(data)
+      .then(() => {
+        SimpleToast.show('Register Successfully!');
+        setname("");
+        setemail("");
+        setpass("");
+        setabout("");
+        Navigation.navigate("Login");
+      });
+  };
 
 
   return (
@@ -158,7 +188,9 @@ function Register() {
 
               <TouchableOpacity
                 style={styles.btn}
-                onPress={() => Navigation.navigate('AppStack')}>
+                onPress={registerUser}
+                // onPress={() => Navigation.navigate('AppStack')}
+                >
                 <Text style={styles.btnText}>Register Now</Text>
               </TouchableOpacity>
 
