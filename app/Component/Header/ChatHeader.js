@@ -29,7 +29,7 @@ const ChatHeader = (props) => {
                 onPress = {() => Navigation.back()}
             />
             <Avatar
-               source = {{uri: data.avatar_url}} 
+               source = {{uri: data.img}} 
                rounded
                size="small"
             /> 

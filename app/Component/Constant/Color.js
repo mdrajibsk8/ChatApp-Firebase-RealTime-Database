@@ -1,4 +1,5 @@
 export const COLORS = {
+    black: '#595959',
     theme : '#27AE60',
     button: '#37b5ba',
     bottomTab:'#151822',

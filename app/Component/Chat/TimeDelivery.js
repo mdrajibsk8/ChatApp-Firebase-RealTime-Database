@@ -17,11 +17,10 @@ const TimeDelivery = (props) => {
             <Text style={{
                 fontFamily: 'Poppins-Regular', 
                 fontSize: 7,
-                color: sender ? COLORS.white : COLORS.gray
+                color: sender ? COLORS.white : COLORS.black
             }}>
                 {moment(item.send_time).format('LLL')}
             </Text>
-
                 <Icon
                     name = {"checkmark-done"}
                     type = "Ionicons"

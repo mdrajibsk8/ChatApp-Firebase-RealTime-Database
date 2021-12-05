@@ -6,7 +6,9 @@ import { FONTS } from '../Constant/Font';
 import TimeDelivery from './TimeDelivery';
 
 const MsgComponent = (props) => {
-    const { sender, massage, item, sendTime } = props;
+    const { sender, item, sendTime } = props;
+
+    // console.log("item",item)
     return (
         <Pressable
             style={{ marginVertical: 0 }}
@@ -28,16 +30,13 @@ const MsgComponent = (props) => {
             >
 
                 <Text style={{ paddingLeft: 5, color:  sender ? COLORS.white : COLORS.black,fontFamily:FONTS.Regular,fontSize:12.5 }}>
-                    {item.massage}
+                    {item.message}
                 </Text>
 
                 <TimeDelivery
                     sender={sender}
                     item={item}
                 />
-
-                
-
             </View>
         </Pressable>
     );
