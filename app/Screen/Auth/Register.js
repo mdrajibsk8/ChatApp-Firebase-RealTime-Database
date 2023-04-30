@@ -9,25 +9,18 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import {
-  Container,
-  Card,
-  CardItem,
-  Icon,
-} from 'native-base';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import { COLORS } from '../../Component/Constant/Color';
-import { FONTS } from '../../Component/Constant/Font';
+import {COLORS} from '../../Component/Constant/Color';
+import {FONTS} from '../../Component/Constant/Font';
 import Navigation from '../../Service/Navigation';
 import uuid from 'react-native-uuid';
 import SimpleToast from 'react-native-simple-toast';
 import database from '@react-native-firebase/database';
-
+import {Card, Icon} from 'react-native-elements';
 
 const {width, height} = Dimensions.get('window');
 
 function Register() {
-
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [pass, setpass] = useState('');
@@ -44,173 +37,137 @@ function Register() {
       emailId: email,
       password: pass,
       about: about,
-      img : "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png"
+      img: 'https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png',
     };
 
     database()
-      .ref('/users/'+data.id)
+      .ref('/users/' + data.id)
       .set(data)
       .then(() => {
         SimpleToast.show('Register Successfully!');
-        setname("");
-        setemail("");
-        setpass("");
-        setabout("");
-        Navigation.navigate("Login");
+        setname('');
+        setemail('');
+        setpass('');
+        setabout('');
+        Navigation.navigate('Login');
       });
   };
 
-
   return (
-    <Container>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       <StatusBar
         backgroundColor={COLORS.theme}
         barStyle="light-content"
         hidden={false}
       />
       <View style={styles.uppercard}>
-        <Image 
-         style={{width:70,height:70,borderRadius:35}}
-         source={{uri:'https://yt3.ggpht.com/yti/APfAmoG-m3--E1zYY977bOWG0FS_syFGSbqjyAbh6dDi=s88-c-k-c0x00ffffff-no-rj-mo'}}   
+        <Image
+          style={{width: 70, height: 70, borderRadius: 35}}
+          source={{
+            uri: 'https://yt3.ggpht.com/yti/APfAmoG-m3--E1zYY977bOWG0FS_syFGSbqjyAbh6dDi=s88-c-k-c0x00ffffff-no-rj-mo',
+          }}
         />
-        <Text 
-        style={{color:'#fff',
-        fontFamily: FONTS.Bold,
-        fontSize:25
-        }}>
+        <Text style={{color: '#fff', fontFamily: FONTS.Bold, fontSize: 25}}>
           DEVELOPERS' SIN
         </Text>
       </View>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <KeyboardAwareScrollView
-    style={{marginTop:20}}
-    showsVerticalScrollIndicator={false}>
+      <View style={{flex: 1, justifyContent: 'center'}}>
         <Card
-          style={{
-            backgroundColor: '#fff',
-            width: width-30,
-            borderRadius: 15,
+          containerStyle={{
+            borderRadius: 10,
+            elevation: 5,
           }}>
-          <CardItem style={styles.cardView}>
-            <View style={{flex: 1}}>
-              <Text style={styles.Login}>Register</Text>
-              <Text style={styles.smallTxt}>
-                In order to Register your account please fill out all fields
-              </Text>
-                 <View style={[styles.inputContainer,{marginTop:10}]}>
-                    <View style={styles.inputIconView}>
-                      <Icon
-                        name="person"
-                        type="Ionicons"
-                        style={{
-                          color: '#fff',
-                          fontSize: 18,
-                          textAlign: 'center',
-                        }}
-                      />
-                    </View>
-                    <TextInput
-                      style={styles.inputs}
-                      placeholder="Enter Full Name"
-                      underlineColorAndroid="transparent"
-                      onChangeText={value => setname(value)}
-                      value={name}
-                      placeholderTextColor={COLORS.liteBlack}
-                    />
-                  </View>
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconView}>
-                      <Icon
-                        name="gmail"
-                        type="MaterialCommunityIcons"
-                        style={{
-                          color: '#fff',
-                          fontSize: 18,
-                          textAlign: 'center',
-                        }}
-                      />
-                    </View>
-                    <TextInput
-                      style={styles.inputs}
-                      placeholder="Enter Email Id"
-                      underlineColorAndroid="transparent"
-                      onChangeText={value => setemail(value)}
-                      value={email}
-                      placeholderTextColor={COLORS.liteBlack}
-                    />
-                  </View>
-
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconView}>
-                      <Icon
-                        name="key"
-                        type="MaterialCommunityIcons"
-                        style={{
-                          color: '#fff',
-                          fontSize: 18,
-                          textAlign: 'center',
-                        }}
-                      />
-                    </View>
-                    <TextInput
-                      style={styles.inputs}
-                      placeholder="Enter Password"
-                      underlineColorAndroid="transparent"
-                      onChangeText={value => setpass(value)}
-                      value={pass}
-                      placeholderTextColor={COLORS.liteBlack}
-                    />
-                  </View>
-
-                  <View style={styles.inputContainer}>
-                    <View style={styles.inputIconView}>
-                      <Icon
-                        name="md-information-circle"
-                        type="Ionicons"
-                        style={{
-                          color: '#fff',
-                          fontSize: 18,
-                          textAlign: 'center',
-                        }}
-                      />
-                    </View>
-                    <TextInput
-                      style={styles.inputs}
-                      placeholder="Enter About"
-                      underlineColorAndroid="transparent"
-                      onChangeText={value => setabout(value)}
-                      value={about}
-                      placeholderTextColor={COLORS.liteBlack}
-                    />
-                  </View>
-                  
-            
-
-              <TouchableOpacity
-                style={styles.btn}
-                onPress={registerUser}
-                // onPress={() => Navigation.navigate('AppStack')}
-                >
-                <Text style={styles.btnText}>Register Now</Text>
-              </TouchableOpacity>
-
-              <View style={styles.contactView}>
-                <Text style={styles.smallTxt}>Existing user?</Text>
-                <TouchableOpacity 
-                style={{marginLeft: 4}}
-                onPress={()=>Navigation.navigate('Login')}>
-                  <Text style={styles.register}>Login Now</Text>
-                </TouchableOpacity>
+          <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+            <Text style={styles.Login}>Register</Text>
+            <Text style={styles.smallTxt}>
+              In order to Register your account please fill out all fields
+            </Text>
+            <View style={[styles.inputContainer, {marginTop: 10}]}>
+              <View style={styles.inputIconView}>
+                <Icon name="person" type="ionicon" color="#fff" size={20} />
               </View>
-              <View>
-
-              </View>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Enter Full Name"
+                underlineColorAndroid="transparent"
+                onChangeText={value => setname(value)}
+                value={name}
+                placeholderTextColor={COLORS.liteBlack}
+              />
             </View>
-          </CardItem>
+            <View style={styles.inputContainer}>
+              <View style={styles.inputIconView}>
+                <Icon
+                  name="gmail"
+                  type="material-community"
+                  color="#fff"
+                  size={20}
+                />
+              </View>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Enter Email Id"
+                underlineColorAndroid="transparent"
+                onChangeText={value => setemail(value)}
+                value={email}
+                placeholderTextColor={COLORS.liteBlack}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <View style={styles.inputIconView}>
+                <Icon
+                  name="key"
+                  type="material-community"
+                  color="#fff"
+                  size={20}
+                />
+              </View>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Enter Password"
+                underlineColorAndroid="transparent"
+                onChangeText={value => setpass(value)}
+                value={pass}
+                placeholderTextColor={COLORS.liteBlack}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <View style={styles.inputIconView}>
+                <Icon
+                  name="md-information-circle"
+                  type="ionicon"
+                  color="#fff"
+                  size={20}
+                />
+              </View>
+              <TextInput
+                style={styles.inputs}
+                placeholder="Enter About"
+                underlineColorAndroid="transparent"
+                onChangeText={value => setabout(value)}
+                value={about}
+                placeholderTextColor={COLORS.liteBlack}
+              />
+            </View>
+
+            <TouchableOpacity style={styles.btn} onPress={registerUser}>
+              <Text style={styles.btnText}>Register Now</Text>
+            </TouchableOpacity>
+
+            <View style={styles.contactView}>
+              <Text style={styles.smallTxt}>Existing user?</Text>
+              <TouchableOpacity
+                style={{marginLeft: 4}}
+                onPress={() => Navigation.navigate('Login')}>
+                <Text style={styles.register}>Login Now</Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAwareScrollView>
         </Card>
-        </KeyboardAwareScrollView>
       </View>
-    </Container>
+    </View>
   );
 }
 
@@ -219,7 +176,7 @@ export default Register;
 const styles = StyleSheet.create({
   uppercard: {
     height: height / 4,
-    backgroundColor : COLORS.theme,
+    backgroundColor: COLORS.theme,
     borderBottomLeftRadius: height / 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -240,9 +197,9 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   loginText: {
-    color : COLORS.lightgray,
+    color: COLORS.lightgray,
     fontSize: 18,
-    fontFamily : FONTS.Regular,
+    fontFamily: FONTS.Regular,
   },
   buttonSec: {marginTop: 20, justifyContent: 'center', alignItems: 'center'},
   logo: {
@@ -257,22 +214,22 @@ const styles = StyleSheet.create({
     flex: 1,
     color: COLORS.liteBlack,
     paddingLeft: 10,
-    fontFamily : FONTS.Regular,
+    fontFamily: FONTS.Regular,
   },
   inputContainer: {
     borderRadius: 30,
-    height:48,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.white,
-    marginBottom:10,
+    marginBottom: 10,
     elevation: 2,
   },
   inputIconView: {
     width: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor : COLORS.theme,
+    backgroundColor: COLORS.theme,
     height: '100%',
     borderRadius: 30,
     alignSelf: 'center',
@@ -283,33 +240,32 @@ const styles = StyleSheet.create({
   smallTxt: {
     fontSize: 13,
     color: COLORS.black,
-    fontFamily : FONTS.Regular,
+    fontFamily: FONTS.Regular,
     marginTop: 10,
-    opacity:.5,
+    opacity: 0.5,
     textAlign: 'center',
   },
   register: {
     fontSize: 13,
-    fontFamily : FONTS.SemiBold,
+    fontFamily: FONTS.SemiBold,
     marginTop: 12,
     textAlign: 'center',
-    color : COLORS.textInput,
-    textDecorationLine:'underline'
+    color: COLORS.textInput,
+    textDecorationLine: 'underline',
   },
   contactView: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
   },
   btnText: {
     color: '#fff',
-    fontFamily : FONTS.SemiBold,
+    fontFamily: FONTS.SemiBold,
     fontSize: 14,
     marginTop: 2,
   },
   btn: {
-    backgroundColor : COLORS.theme,
+    backgroundColor: COLORS.theme,
     width: '100%',
     height: 50,
     borderRadius: 30,
@@ -319,8 +275,8 @@ const styles = StyleSheet.create({
   },
   Login: {
     alignSelf: 'center',
-    fontFamily : FONTS.Medium,
-    color : COLORS.textInput,
+    fontFamily: FONTS.Medium,
+    color: COLORS.textInput,
     fontSize: 20,
     marginTop: 10,
   },
@@ -329,5 +285,5 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingBottom: 20,
     paddingTop: 20,
-  }
+  },
 });

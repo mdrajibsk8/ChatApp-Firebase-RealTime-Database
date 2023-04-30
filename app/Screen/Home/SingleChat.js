@@ -1,24 +1,21 @@
 //import liraries
-import {Icon} from 'native-base';
-import React, {Component, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  TextInput,
-  SectionList,
-  TouchableOpacity,
-  FlatList,
-} from 'react-native';
+import database from '@react-native-firebase/database';
 import moment from 'moment';
+import React, {useEffect} from 'react';
+import {
+  FlatList,
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Icon} from 'react-native-elements';
+import SimpleToast from 'react-native-simple-toast';
+import {useSelector} from 'react-redux';
 import MsgComponent from '../../Component/Chat/MsgComponent';
 import {COLORS} from '../../Component/Constant/Color';
 import ChatHeader from '../../Component/Header/ChatHeader';
-import {useSelector} from 'react-redux';
-import database from '@react-native-firebase/database';
-import SimpleToast from 'react-native-simple-toast';
-
 
 const SingleChat = props => {
   const {userData} = useSelector(state => state.User);
@@ -31,16 +28,18 @@ const SingleChat = props => {
   const [disabled, setdisabled] = React.useState(false);
   const [allChat, setallChat] = React.useState([]);
 
-
   useEffect(() => {
     const onChildAdd = database()
-      .ref('/messages/'+ receiverData.roomId)
+      .ref('/messages/' + receiverData.roomId)
       .on('child_added', snapshot => {
         // console.log('A new node has been added', snapshot.val());
-        setallChat((state) => [snapshot.val(),...state]);
+        setallChat(state => [snapshot.val(), ...state]);
       });
     // Stop listening for updates when no longer required
-    return () => database().ref('/messages'+ receiverData.roomId).off('child_added', onChildAdd);
+    return () =>
+      database()
+        .ref('/messages' + receiverData.roomId)
+        .off('child_added', onChildAdd);
   }, [receiverData.roomId]);
 
   const msgvalid = txt => txt && txt.replace(/\s/g, '').length;
@@ -73,7 +72,7 @@ const SingleChat = props => {
         .ref('/chatlist/' + receiverData?.id + '/' + userData?.id)
         .update(chatListupdate)
         .then(() => console.log('Data updated.'));
-      console.log("'/chatlist/' + userData?.id + '/' + data?.id",receiverData)
+      console.log("'/chatlist/' + userData?.id + '/' + data?.id", receiverData);
       database()
         .ref('/chatlist/' + userData?.id + '/' + receiverData?.id)
         .update(chatListupdate)
@@ -83,7 +82,6 @@ const SingleChat = props => {
       setdisabled(false);
     });
   };
-
 
   return (
     <View style={styles.container}>
@@ -99,10 +97,7 @@ const SingleChat = props => {
           inverted
           renderItem={({item}) => {
             return (
-              <MsgComponent
-                sender={item.from == userData.id}
-                item={item}
-              />
+              <MsgComponent sender={item.from == userData.id} item={item} />
             );
           }}
         />
@@ -136,14 +131,7 @@ const SingleChat = props => {
         />
 
         <TouchableOpacity disabled={disabled} onPress={sendMsg}>
-          <Icon
-            style={{
-              // marginHorizontal: 15,
-              color: COLORS.white,
-            }}
-            name="paper-plane-sharp"
-            type="Ionicons"
-          />
+          <Icon color={COLORS.white} name="paper-plane-sharp" type="ionicon" />
         </TouchableOpacity>
       </View>
     </View>
