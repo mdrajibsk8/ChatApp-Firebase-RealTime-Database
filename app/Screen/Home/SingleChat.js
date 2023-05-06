@@ -5,6 +5,9 @@ import React, {useEffect} from 'react';
 import {
   FlatList,
   ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -84,57 +87,67 @@ const SingleChat = props => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ChatHeader data={receiverData} />
-      <ImageBackground
-        source={require('../../Assets/Background.jpg')}
-        style={{flex: 1}}>
-        <FlatList
-          style={{flex: 1}}
-          data={allChat}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index}
-          inverted
-          renderItem={({item}) => {
-            return (
-              <MsgComponent sender={item.from == userData.id} item={item} />
-            );
-          }}
-        />
-      </ImageBackground>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS == 'ios' ? 'padding' : null}>
+        <ImageBackground
+          source={require('../../Assets/Background.jpg')}
+          style={{flex: 1}}>
+          <FlatList
+            style={{flex: 1}}
+            data={allChat}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index}
+            inverted
+            renderItem={({item}) => {
+              return (
+                <MsgComponent sender={item.from == userData.id} item={item} />
+              );
+            }}
+          />
+        </ImageBackground>
 
-      <View
-        style={{
-          backgroundColor: COLORS.theme,
-          elevation: 5,
-          // height: 60,
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: 7,
-          justifyContent: 'space-evenly',
-        }}>
-        <TextInput
+        <View
           style={{
-            backgroundColor: COLORS.white,
-            width: '80%',
-            borderRadius: 25,
-            borderWidth: 0.5,
-            borderColor: COLORS.white,
-            paddingHorizontal: 15,
-            color: COLORS.black,
-          }}
-          placeholder="type a message"
-          placeholderTextColor={COLORS.black}
-          multiline={true}
-          value={msg}
-          onChangeText={val => setMsg(val)}
-        />
+            backgroundColor: COLORS.theme,
+            elevation: 5,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 7,
+            justifyContent: 'space-evenly',
+          }}>
+          <TextInput
+            style={{
+              backgroundColor: COLORS.white,
+              width: '80%',
+              borderRadius: 25,
+              borderWidth: 0.5,
+              borderColor: COLORS.white,
+              paddingHorizontal: 15,
+              color: COLORS.black,
+              height: 48,
+              paddingTop: Platform.OS == 'ios' ? 15 : 0,
+            }}
+            placeholder="type a message"
+            placeholderTextColor={COLORS.black}
+            multiline={true}
+            numberOfLines={5}
+            value={msg}
+            onChangeText={val => setMsg(val)}
+          />
 
-        <TouchableOpacity disabled={disabled} onPress={sendMsg}>
-          <Icon color={COLORS.white} name="paper-plane-sharp" type="ionicon" />
-        </TouchableOpacity>
-      </View>
-    </View>
+          <TouchableOpacity disabled={disabled} onPress={sendMsg}>
+            <Icon
+              color={COLORS.white}
+              name="paper-plane-sharp"
+              type="ionicon"
+            />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -142,6 +155,7 @@ const SingleChat = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.theme,
   },
 });
 

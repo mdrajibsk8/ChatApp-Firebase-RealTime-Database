@@ -72,12 +72,14 @@ function Register() {
         </Text>
       </View>
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <Card
-          containerStyle={{
-            borderRadius: 10,
-            elevation: 5,
-          }}>
-          <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{flex: 1, justifyContent: 'center'}}
+          showsVerticalScrollIndicator={false}>
+          <Card
+            containerStyle={{
+              borderRadius: 10,
+              elevation: 5,
+            }}>
             <Text style={styles.Login}>Register</Text>
             <Text style={styles.smallTxt}>
               In order to Register your account please fill out all fields
@@ -164,8 +166,8 @@ function Register() {
                 <Text style={styles.register}>Login Now</Text>
               </TouchableOpacity>
             </View>
-          </KeyboardAwareScrollView>
-        </Card>
+          </Card>
+        </KeyboardAwareScrollView>
       </View>
     </View>
   );
@@ -212,7 +214,7 @@ const styles = StyleSheet.create({
   inputs: {
     borderBottomColor: COLORS.white,
     flex: 1,
-    color: COLORS.liteBlack,
+    color: COLORS.black,
     paddingLeft: 10,
     fontFamily: FONTS.Regular,
   },

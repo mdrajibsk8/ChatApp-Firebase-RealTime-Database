@@ -74,18 +74,20 @@ function Login() {
         </Text>
       </View>
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <Card
-          containerStyle={{
-            borderRadius: 10,
-            elevation: 5,
-          }}>
-          <Text style={styles.Login}>Login</Text>
-          <Text style={styles.smallTxt}>
-            In order to login your account please enter credentials
-          </Text>
-          <KeyboardAwareScrollView
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={{flex: 1, justifyContent: 'center'}}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
+          <Card
+            containerStyle={{
+              borderRadius: 10,
+              elevation: 5,
+            }}>
+            <Text style={styles.Login}>Login</Text>
+            <Text style={styles.smallTxt}>
+              In order to login your account please enter credentials
+            </Text>
+
             <View style={[styles.inputContainer, {marginTop: 10}]}>
               <View style={styles.inputIconView}>
                 <Icon
@@ -101,7 +103,7 @@ function Login() {
                 keyboardType="email-address"
                 underlineColorAndroid="transparent"
                 onChangeText={value => {
-                  setemail(value);
+                  setemail(value.toLowerCase());
                 }}
                 value={email}
                 placeholderTextColor={COLORS.liteBlack}
@@ -141,8 +143,8 @@ function Login() {
                 <Text style={styles.register}>Register Now</Text>
               </TouchableOpacity>
             </View>
-          </KeyboardAwareScrollView>
-        </Card>
+          </Card>
+        </KeyboardAwareScrollView>
       </View>
     </View>
   );
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
   inputs: {
     borderBottomColor: COLORS.white,
     flex: 1,
-    color: COLORS.liteBlack,
+    color: COLORS.black,
     paddingLeft: 10,
     fontFamily: FONTS.Regular,
   },

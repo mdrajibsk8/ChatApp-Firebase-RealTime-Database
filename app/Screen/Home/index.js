@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   FlatList,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   TouchableOpacity,
@@ -60,7 +61,7 @@ const Home = props => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.white}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
       <HomeHeader />
       <FlatList
@@ -79,7 +80,7 @@ const Home = props => {
           size={20}
         />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

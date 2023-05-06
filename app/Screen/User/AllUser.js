@@ -1,6 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StatusBar, StyleSheet, View} from 'react-native';
-import {ListItem, Avatar} from 'react-native-elements';
+import {
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {ListItem, Avatar, Icon} from 'react-native-elements';
 import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
 import {COLORS} from '../../Component/Constant/Color';
 import {FONTS} from '../../Component/Constant/Font';
@@ -103,22 +109,35 @@ const AllUser = () => {
   );
 
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.white}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
-      <SearchBar
-        placeholder="Search by name..."
-        onChangeText={val => searchuser(val)}
-        value={search}
-        containerStyle={styles.searchContainer}
-        inputStyle={styles.searchInput}
-      />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginHorizontal: 10,
+        }}>
+        <Icon
+          name="chevron-back-outline"
+          type="ionicon"
+          size={30}
+          onPress={() => Navigation.back()}
+        />
+        <SearchBar
+          placeholder="Search by name..."
+          onChangeText={val => searchuser(val)}
+          value={search}
+          containerStyle={styles.searchContainer}
+          inputStyle={styles.searchInput}
+        />
+      </View>
       <FlatList
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         data={allUser}
         renderItem={renderItem}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -126,9 +145,9 @@ export default AllUser;
 
 const styles = StyleSheet.create({
   searchContainer: {
-    elevation: 2,
+    width: '90%',
+    // elevation: 2,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 10,
   },
   searchInput: {
     fontSize: 15,
