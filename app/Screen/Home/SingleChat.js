@@ -19,13 +19,15 @@ import {useSelector} from 'react-redux';
 import MsgComponent from '../../Component/Chat/MsgComponent';
 import {COLORS} from '../../Component/Constant/Color';
 import ChatHeader from '../../Component/Header/ChatHeader';
+import ImagePicker from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 
 const SingleChat = props => {
   const {userData} = useSelector(state => state.User);
 
   const {receiverData} = props.route.params;
 
-  console.log('receiverData', receiverData);
+  // console.log('receiverData', receiverData);
 
   const [msg, setMsg] = React.useState('');
   const [disabled, setdisabled] = React.useState(false);
@@ -61,21 +63,24 @@ const SingleChat = props => {
       sendTime: moment().format(''),
       msgType: 'text',
     };
+    updateMessagesToFirebase(msgData);
+  };
 
+  const updateMessagesToFirebase = async msgData => {
     const newReference = database()
       .ref('/messages/' + receiverData.roomId)
       .push();
     msgData.id = newReference.key;
     newReference.set(msgData).then(() => {
       let chatListupdate = {
-        lastMsg: msg,
+        lastMsg: msgData.message,
         sendTime: msgData.sendTime,
+        msgType: msgData.msgType,
       };
       database()
         .ref('/chatlist/' + receiverData?.id + '/' + userData?.id)
         .update(chatListupdate)
         .then(() => console.log('Data updated.'));
-      console.log("'/chatlist/' + userData?.id + '/' + data?.id", receiverData);
       database()
         .ref('/chatlist/' + userData?.id + '/' + receiverData?.id)
         .update(chatListupdate)
@@ -83,6 +88,33 @@ const SingleChat = props => {
 
       setMsg('');
       setdisabled(false);
+    });
+  };
+
+  const uploadImage = async () => {
+    ImagePicker.openPicker({
+      cropping: false,
+    }).then(async image => {
+      console.log(image);
+      let imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
+      let ext = imgName.split('.').pop();
+      let name = imgName.split('.')[0];
+      let newName = name + Date.now() + '.' + ext;
+      const reference = storage().ref('chatMedia/' + newName);
+      await reference.putFile(image.path);
+      const imgUrl = await storage()
+        .ref('chatMedia/' + newName)
+        .getDownloadURL();
+      console.log('url=>>', imgUrl);
+      let msgData = {
+        roomId: receiverData.roomId,
+        message: imgUrl,
+        from: userData?.id,
+        to: receiverData.id,
+        sendTime: moment().format(''),
+        msgType: 'image',
+      };
+      updateMessagesToFirebase(msgData);
     });
   };
 
@@ -117,6 +149,7 @@ const SingleChat = props => {
             alignItems: 'center',
             paddingVertical: 7,
             justifyContent: 'space-evenly',
+            paddingHorizontal: 10,
           }}>
           <TextInput
             style={{
@@ -137,6 +170,10 @@ const SingleChat = props => {
             value={msg}
             onChangeText={val => setMsg(val)}
           />
+
+          <TouchableOpacity disabled={disabled} onPress={uploadImage}>
+            <Icon color={COLORS.white} name="attach-outline" type="ionicon" />
+          </TouchableOpacity>
 
           <TouchableOpacity disabled={disabled} onPress={sendMsg}>
             <Icon

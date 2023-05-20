@@ -54,7 +54,7 @@ const Home = props => {
         <ListItem.Subtitle
           style={{fontFamily: FONTS.Regular, fontSize: 12}}
           numberOfLines={1}>
-          {item.lastMsg}
+          {item.msgType === 'image' ? 'Image' : item.lastMsg}
         </ListItem.Subtitle>
       </ListItem.Content>
     </ListItem>
